@@ -21,3 +21,7 @@
 2024-07-03 23:41:11,479 Connection from ('127.0.0.1', 61405).
 2024-07-03 23:41:15,570 Quit key pressed. Closing connection and server.
 2024-07-03 23:41:15,591 Closing server.
+2024-07-04 00:10:22,747 Listening for connections on 127.0.0.1:12345...
+2024-07-04 00:10:27,942 Connection from ('127.0.0.1', 63112).
+2024-07-04 00:10:34,632 Error: Failed to receive image.
+2024-07-04 00:10:34,635 Listening for connections on 127.0.0.1:12345...

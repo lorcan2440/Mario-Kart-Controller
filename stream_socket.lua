@@ -33,7 +33,7 @@ function bitoper(a, b, oper)
 end
 
 function sendScreenshot()
-    local screen = gui.gdscreenshot()
+    local screen = gui.gdscreenshot("top")  -- options: "both" (default), "top", "bottom"
     local img = gd.createFromGdStr(screen)
     local pngData = img:pngStr()
     local dataLength = string.format("%09d", #pngData)
