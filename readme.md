@@ -44,7 +44,7 @@ This project explores the techniques of control theory and related concepts to d
     │   └── core.dll
     ├── mime/
     │   └── core.dll
-    └── lua/
+    └── luasocket/
         ├── socket/
         │   ├── ftp.lua
         │   ├── http.lua
@@ -69,7 +69,7 @@ This project explores the techniques of control theory and related concepts to d
     local gd = require('gd')
 
     -- import luasocket library
-    package.path = script_dir .. "lua_libs/lua/?.lua;"
+    package.path = script_dir .. "lua_libs/luasocket/?.lua;"
     package.cpath = socket_path .. "/core.dll;" .. mime_path .. "/core.dll;"
     local socket = require('socket')
     ```
