@@ -8,7 +8,7 @@ package.cpath = gd_path .. "/gd.dll;"
 local gd = require('gd')
 
 -- import luasocket library
-package.path = script_dir .. "lua_libs/lua/?.lua;"
+package.path = script_dir .. "lua_libs/luasocket/?.lua;"
 package.cpath = socket_path .. "/core.dll;" .. mime_path .. "/core.dll;"
 local socket = require('socket')
 

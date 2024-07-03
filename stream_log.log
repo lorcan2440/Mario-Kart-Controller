@@ -17,3 +17,7 @@
 2024-07-03 23:19:58,876 Connection from ('127.0.0.1', 60063).
 2024-07-03 23:20:34,908 Quit key pressed. Closing connection and server.
 2024-07-03 23:20:34,926 Closing server.
+2024-07-03 23:41:03,146 Listening for connections on 127.0.0.1:12345...
+2024-07-03 23:41:11,479 Connection from ('127.0.0.1', 61405).
+2024-07-03 23:41:15,570 Quit key pressed. Closing connection and server.
+2024-07-03 23:41:15,591 Closing server.
