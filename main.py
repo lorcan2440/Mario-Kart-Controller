@@ -21,9 +21,7 @@ def receive_image(sock: socket.socket) -> np.ndarray:
     '''
     Receives an image from the socket and returns it as a NumPy array, 
     ready to be displayed as an image. The image comes from a screen capture 
-    of the DeSmuME emulator, using the Lua script:
-
-    `C:/Users/lnick/Documents/Games/Lua/screenshot.lua`
+    of the DeSmuME emulator, using the Lua script `stream_socket.lua`.
 
     By continuously sending screenshots through the socket, the
     gameplay is effectively livestreamed through to OpenCV.
@@ -70,7 +68,7 @@ def send_buttons(sock: socket.socket, buttons: int) -> None:
     Sends a byte of button input data to the socket, which will be read by the
     Lua script controlling the DeSmuME emulator. The byte is formatted as follows:
 
-    - Bit 0: A button
+    - Bit 0: 'A' button
     - Bit 1: Left button
     - Bit 2: Right button
     - Bits 3-7: Unused
@@ -86,12 +84,12 @@ def send_buttons(sock: socket.socket, buttons: int) -> None:
 
 def main():
 
-    # Set up the server using TCP IPv4
+    # set up the server using TCP IPv4
     host, port = "127.0.0.1", 12345
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((host, port))
 
-    while cv2.waitKey(1) != ord('q'):  # loop for accepting connections, press 'q' to quit
+    while cv2.waitKey(1) & 0xFF != ord('q'):  # loop for accepting connections, press 'q' to quit
 
         # wait for a connection
         server.listen(1)
@@ -99,7 +97,7 @@ def main():
         client_socket, client_address = server.accept()
         log_server.info(f"Connection from {client_address}.")
 
-        while cv2.waitKey(1) != ord('q'):  # loop for processing image frames, press 'q' to quit
+        while cv2.waitKey(1) & 0xFF != ord('q'):  # main loop for processing image frames, press 'q' to quit
             try:
                 image = receive_image(client_socket)
                 if image is not None:

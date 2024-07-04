@@ -12,6 +12,9 @@ package.path = script_dir .. "lua_libs/luasocket/?.lua;"
 package.cpath = socket_path .. "/core.dll;" .. mime_path .. "/core.dll;"
 local socket = require('socket')
 
+--print(gd.VERSION)
+--print(socket._VERSION)
+
 local file = io.open('stream_log.log', 'a')
 io.stdout = file
 

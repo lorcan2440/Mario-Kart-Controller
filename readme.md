@@ -27,7 +27,7 @@ This project explores the techniques of control theory and related concepts to d
 
 ### How to Install Lua Dependencies (for `stream_socket.lua`, 32-bit, in DeSmuME environment)
 
-1. Ensure you have the 32-bit version of `lua51.dll` in a directory added to PATH. These files are included here in the `lua_libs` folder but don't have to be placed there.
+1. Ensure you have the 32-bit version of `lua51.dll` in a directory added to PATH. These files are included here in the `lua_libs` folder but don't have to be placed there. If you've run Lua scripts in DeSmuME before you've already done this.
 2. Obtain the pre-built 32-bit Lua 5.1 LuaSocket libraries (`socket` and `mime`) from [this source](https://www.unrealsoftware.de/files_show.php?file=16117). Download and extract to the script directory.
 3. Obtain the pre-built `gd` library [here](https://downloads.onworks.net/softwaredownload.php?link=https%3A%2F%2Fdownloads.onworks.net%2Fdownloadapp%2FSOFTWARE%2Flua-gd-2.0.33r2-win32.zip%3Fservice%3Dservice01&filename=lua-gd-2.0.33r2-win32.zip). Extract all the `.dll` files: `free.type6.dll`, `gd.dll`, `jpeg62.dll`, `libgd2.dll`, `libiconv2.dll`, `libpng13.dll`.
 4. The required directory structure is shown in the `lua_libs` folder inside this repo. Copy the extracted files to the appropriate directories. It has the following structure:
@@ -72,6 +72,9 @@ This project explores the techniques of control theory and related concepts to d
     package.path = script_dir .. "lua_libs/luasocket/?.lua;"
     package.cpath = socket_path .. "/core.dll;" .. mime_path .. "/core.dll;"
     local socket = require('socket')
+
+    print(gd.VERSION)
+    print(socket._VERSION)
     ```
 
 ### To do list
@@ -79,7 +82,7 @@ This project explores the techniques of control theory and related concepts to d
 - [x] Find out how to take screenshots in Lua
 - [x] Use sockets to stream the screen image data to Python's OpenCV library
 - [ ] Use morphological operations to produce sharper images of the track
-- [ ] Allow the player to manually steer while the script automatically holds A
+- [x] Allow the player to manually steer while the script automatically holds A
 - [ ] Write the OpenCV and socket Python program in C++ for faster processing - may not actually improve performance that much but will be good for learning
 
 Ideas for control algorithm:
