@@ -6,16 +6,6 @@ import cv2
 
 from log_manager import log_server
 
-'''
-BUG to investigate:
-
-  File "C:/Users/lnick/Documents/Games/Python/receive_data.py", line 24, in receive_image
-    length_str = sock.recv(9)  # data length (9 bytes)
-                 ^^^^^^^^^^^^
-1) ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
-2) ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
-Lua script: Error receiving data: timeout
-'''
 
 def receive_image(sock: socket.socket) -> np.ndarray:
     '''

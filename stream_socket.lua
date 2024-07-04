@@ -76,6 +76,7 @@ function receiveButtons()
     end
 end
 
+-- main event loop
 while not input.get().Q do  -- press key 'q' while on DeSmuME window to stop streaming
     sendScreenshot()
     receiveButtons()
