@@ -11,23 +11,23 @@ This project explores the techniques of control theory and related concepts to d
 
 ### Requirements
 
-- Windows 11
+- Windows 11 (if using the libraries given here)
 - DeSmuME (x86), set up to use 32-bit Lua 5.1
-- Lua libraries: [lua-gd](https://github.com/ittner/lua-gd), [LuaSocket](https://github.com/lunarmodules/luasocket)
-- Python libraries: [OpenCV](https://pypi.org/project/opencv-python/), [NumPy](https://numpy.org/)
-- Mario Kart DS ROM
+- Lua libraries: [lua-gd](https://github.com/ittner/lua-gd) and [LuaSocket](https://github.com/lunarmodules/luasocket)
+- Python libraries: [OpenCV](https://pypi.org/project/opencv-python/) and [NumPy](https://numpy.org/)
+- Mario Kart ROM: [via romsgames.net](https://www.romsgames.net/nintendo-ds-rom-mario-kart-ds-1/)
 
 ### How to Run
 
 1. Open DeSmuME with Mario Kart DS.
-2. In python, run `receive_data.py` to set up a server.
-3. In the Lua scripting window of DeSmuME, load `screenshot.lua`.
+2. In Python, run `main.py` to set up a server.
+3. In the Lua scripting window of DeSmuME, load `stream_socket.lua`.
 4. Start a race in Mario Kart.
 5. You will see game in OpenCV playing itself.
 
 ### How to Install Lua Dependencies (for `stream_socket.lua`, 32-bit, in DeSmuME environment)
 
-1. Ensure you have the 32-bit version of `lua51.dll` in a directory added to PATH.
+1. Ensure you have the 32-bit version of `lua51.dll` in a directory added to PATH. These files are included here in the `lua_libs` folder but don't have to be placed there.
 2. Obtain the pre-built 32-bit Lua 5.1 LuaSocket libraries (`socket` and `mime`) from [this source](https://www.unrealsoftware.de/files_show.php?file=16117). Download and extract to the script directory.
 3. Obtain the pre-built `gd` library [here](https://downloads.onworks.net/softwaredownload.php?link=https%3A%2F%2Fdownloads.onworks.net%2Fdownloadapp%2FSOFTWARE%2Flua-gd-2.0.33r2-win32.zip%3Fservice%3Dservice01&filename=lua-gd-2.0.33r2-win32.zip). Extract all the `.dll` files: `free.type6.dll`, `gd.dll`, `jpeg62.dll`, `libgd2.dll`, `libiconv2.dll`, `libpng13.dll`.
 4. The required directory structure is shown in the `lua_libs` folder inside this repo. Copy the extracted files to the appropriate directories. It has the following structure:

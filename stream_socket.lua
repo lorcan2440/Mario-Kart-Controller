@@ -11,7 +11,6 @@ local gd = require('gd')
 package.path = script_dir .. "lua_libs/luasocket/?.lua;"
 package.cpath = socket_path .. "/core.dll;" .. mime_path .. "/core.dll;"
 local socket = require('socket')
-local udp = socket.udp()
 
 local file = io.open('stream_log.log', 'a')
 io.stdout = file
