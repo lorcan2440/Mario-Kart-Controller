@@ -78,7 +78,6 @@ This project explores the techniques of control theory and related concepts to d
 
 - [x] Find out how to take screenshots in Lua
 - [x] Use sockets to stream the screen image data to Python's OpenCV library
-- [ ] Try to optimise the streaming rate: use UDP sockets instead of TCP, send grayscale images only, etc
 - [ ] Use morphological operations to produce sharper images of the track
 - [ ] Allow the player to manually steer while the script automatically holds A
 - [ ] Write the OpenCV and socket Python program in C++ for faster processing - may not actually improve performance that much but will be good for learning

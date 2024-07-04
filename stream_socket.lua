@@ -11,6 +11,7 @@ local gd = require('gd')
 package.path = script_dir .. "lua_libs/luasocket/?.lua;"
 package.cpath = socket_path .. "/core.dll;" .. mime_path .. "/core.dll;"
 local socket = require('socket')
+local udp = socket.udp()
 
 local file = io.open('stream_log.log', 'a')
 io.stdout = file
@@ -66,7 +67,7 @@ function receiveButtons()
         -- can also request which buttons are 'only pressed' (down) or 'only released' (up)
     else
         -- socket is closed
-        print("Error receiving data:", err)
+        print("Error receiving button input data:", err, "at", socket.gettime())
         print("Disconnecting from server and pausing the game.")
         client:close()
         emu.pause()

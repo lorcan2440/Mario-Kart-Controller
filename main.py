@@ -1,5 +1,6 @@
 import socket
 import logging
+import time
 import numpy as np
 import cv2
 
@@ -15,7 +16,6 @@ BUG to investigate:
 2) ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
 Lua script: Error receiving data: timeout
 '''
-
 
 def receive_image(sock: socket.socket) -> np.ndarray:
     '''
@@ -54,8 +54,9 @@ def receive_image(sock: socket.socket) -> np.ndarray:
     return image
 
 def process_image(img: np.ndarray) -> np.ndarray:
-    # for now, just return the image as is
-    return img
+    # for now, just convert to grayscale
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return img_gray
 
 def compute_button_input(img: np.ndarray) -> int:
     # output format: one byte representing the button inputs
@@ -83,39 +84,44 @@ def send_buttons(sock: socket.socket, buttons: int) -> None:
     sock.sendall(data)
 
 
-# Set up the server using TCP IPv4
-host, port = "127.0.0.1", 12345
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind((host, port))
+def main():
 
-while cv2.waitKey(1) != ord('q'):  # loop for accepting connections, press 'q' to quit
+    # Set up the server using TCP IPv4
+    host, port = "127.0.0.1", 12345
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((host, port))
 
-    # wait for a connection
-    server.listen(1)
-    log_server.info(f"Listening for connections on {host}:{port}...")
-    client_socket, client_address = server.accept()
-    log_server.info(f"Connection from {client_address}.")
+    while cv2.waitKey(1) != ord('q'):  # loop for accepting connections, press 'q' to quit
 
-    while cv2.waitKey(1) != ord('q'):  # loop for processing image frames, press 'q' to quit
-        try:
-            image = receive_image(client_socket)
-            if image is not None:
-                proc_img = process_image(image)
-                button_input = compute_button_input(proc_img)
-                send_buttons(client_socket, button_input)
-                cv2.imshow('Stream from DeSmuME', image)
-            else:
-                log_server.error('Error: Failed to receive image.')
-                break
-        except (ConnectionAbortedError, ConnectionResetError) as e:
-            if e.errno in (10053, 10054):
-                log_server.error(f'Error: {e}')
-                break
-    else:
-        log_server.info('Quit key pressed. Closing connection and server.')
-        cv2.destroyAllWindows()
-        break
+        # wait for a connection
+        server.listen(1)
+        log_server.info(f"Listening for connections on {host}:{port}...")
+        client_socket, client_address = server.accept()
+        log_server.info(f"Connection from {client_address}.")
 
-log_server.info('Closing server.')
-client_socket.close()
-server.close()
+        while cv2.waitKey(1) != ord('q'):  # loop for processing image frames, press 'q' to quit
+            try:
+                image = receive_image(client_socket)
+                if image is not None:
+                    proc_img = process_image(image)
+                    button_input = compute_button_input(proc_img)
+                    send_buttons(client_socket, button_input)
+                    cv2.imshow('Stream from DeSmuME', proc_img)
+                else:
+                    log_server.error(f'Error: Failed to receive image at {time.time()}.')
+                    break
+            except (ConnectionAbortedError, ConnectionResetError) as e:
+                if e.errno in (10053, 10054):
+                    log_server.error(f'Error: {e}')
+                    break
+        else:
+            log_server.info('Quit key pressed. Closing connection and server.')
+            cv2.destroyAllWindows()
+            break
+
+    log_server.info('Closing server.')
+    client_socket.close()
+    server.close()
+
+if __name__ == '__main__':
+    main()
