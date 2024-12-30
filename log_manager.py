@@ -1,33 +1,25 @@
 import logging
-import time
+import sys
+from datetime import datetime
+
 
 class MicrosecondFormatter(logging.Formatter):
-    """
-    A custom formatter to include microseconds in log records.
-    """
     def formatTime(self, record, datefmt=None):
-        """
-        Override formatTime to add microseconds.
-        """
-        # Create a timestamp using the original record's creation time
-        ct = self.converter(record.created)
-        if datefmt:
-            # If datefmt is specified, use it, but add microseconds
-            s = time.strftime(datefmt, ct) + ".{:06d}".format(record.msecs * 1000)
-        else:
-            # Default format includes the full date, time, and microseconds
-            s = time.strftime("%Y-%m-%d %H:%M:%S", ct) + ".{:06d}".format(record.msecs * 1000)
-        return s
+        if not datefmt:
+            return super().formatTime(record, datefmt=datefmt)
 
-# Set up logging with the custom formatter
-logging.basicConfig(format='%(asctime)s %(message)s', filename='stream_log.log',
-    filemode='a', encoding='utf-8', level=logging.DEBUG)
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
+        return datetime.fromtimestamp(record.created).astimezone().strftime(datefmt)
 
-# Use the custom formatter
-formatter = MicrosecondFormatter('%(name)-12s: %(levelname)-8s %(message)s', '%m/%d/%Y %I:%M:%S %p')
-console.setFormatter(formatter)
-logging.getLogger().addHandler(console)
-logging.captureWarnings(True)
-log_server = logging.getLogger('Python Server')
+formatter = MicrosecondFormatter('%(asctime)s - %(levelname)s - %(message)s', 
+    datefmt="%Y-%m-%d %H:%M:%S.%f")
+
+file_handler = logging.FileHandler('stream_log.log')
+file_handler.setFormatter(formatter)
+
+console_handler = logging.StreamHandler(stream=sys.stdout)
+console_handler.setFormatter(formatter)
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)

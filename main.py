@@ -4,7 +4,7 @@ import time
 import numpy as np
 import cv2
 
-from log_manager import log_server
+from log_manager import logger
 
 
 def receive_image(sock: socket.socket) -> np.ndarray:
@@ -84,9 +84,9 @@ def main():
 
         # wait for a connection
         server.listen(1)
-        log_server.info(f"Listening for connections on {host}:{port}...")
+        logger.info(f"Listening for connections on {host}:{port}...")
         client_socket, client_address = server.accept()
-        log_server.info(f"Connection from {client_address}.")
+        logger.info(f"Connection from {client_address}.")
 
         while cv2.waitKey(1) & 0xFF != ord('q'):  # main loop for processing image frames, press 'q' to quit
             try:
@@ -97,18 +97,18 @@ def main():
                     send_buttons(client_socket, button_input)
                     cv2.imshow('Stream from DeSmuME', proc_img)
                 else:
-                    log_server.error(f'Error: Failed to receive image at {time.time()}.')
+                    logger.error(f'Error: Failed to receive image at {time.time()}.')
                     break
             except (ConnectionAbortedError, ConnectionResetError) as e:
                 if e.errno in (10053, 10054):
-                    log_server.error(f'Error: {e}')
+                    logger.error(f'Error: {e}')
                     break
         else:
-            log_server.info('Quit key pressed. Closing connection and server.')
+            logger.info('Quit key pressed. Closing connection and server.')
             cv2.destroyAllWindows()
             break
 
-    log_server.info('Closing server.')
+    logger.info('Closing server.')
     client_socket.close()
     server.close()
 
