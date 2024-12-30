@@ -1,3 +1,24 @@
+--[[
+How to run:
+
+1. Run the Python program `main.py` first, which starts the server.
+2. Load and run this Lua script `stream_socket.lua` in DeSmuME.
+3. Observe the live stream of the game screen and control the game using the Python script.
+4. Press the 'q' key at any time while on the DeSmuME window to stop the streaming.
+
+Info and docs:
+
+Mario Kart DS Player information:
+https://tasvideos.org/GameResources/DS/MarioKartDS#TricksAndGameMechanics
+
+Mario Kart DS Modding Community Discord Server:
+https://discord.com/invite/CAktUYP
+
+DeSmuME Lua Script Source
+https://github.com/TASEmulators/desmume/blob/master/desmume/src/lua-engine.cpp
+]]
+
+
 local script_dir = debug.getinfo(1, "S").source:match[[^@?(.*[\/])[^\/]-$]]
 local gd_path = script_dir .. "lua_libs/gd"
 local socket_path = script_dir .. "lua_libs/socket"
@@ -25,7 +46,10 @@ print("Connected to the server: " .. host .. ":" .. port)
 
 OR, XOR, AND = 1, 3, 4
 
+local ptrRacerDataAddr = 0x0217ACF8  -- pointer to the player data structure
+
 function bitoper(a, b, oper)
+    -- performs a bitwise operation
     -- source: https://stackoverflow.com/a/32389020/8747480
     local r, m, s = 0, 2^31
     repeat
@@ -76,9 +100,26 @@ function receiveButtons()
     end
 end
 
+local function read_dword_table_le(data, offset)
+    -- read four bytes from the data table in little-endian order
+    return 256^0 * data[offset] + 256^1 * data[offset + 1] + 256^2 * data[offset + 2] + 256^3 * data[offset + 3]
+end
+
+function sendData()
+    -- extract useful data from the game memory
+    -- this will be used in the RL agent's reward model
+    local ptrPlayerData = memory.readdwordsigned(ptrRacerDataAddr)
+    local allData = memory.readbyterange(ptrPlayerData + 1, 0x5A8 - 1)
+    local speed = read_dword_table_le(allData, 0x2A8)
+    local maxSpeed = read_dword_table_le(allData, 0xD0)
+    local offroadSpeed = read_dword_table_le(allData, 0xDC)
+    print(speed, maxSpeed, offroadSpeed)
+end
+
 -- main event loop
 while not input.get().Q do  -- press key 'q' while on DeSmuME window to stop streaming
     sendScreenshot()
+    sendData()
     receiveButtons()
     emu.frameadvance()
 end

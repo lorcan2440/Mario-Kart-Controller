@@ -57,11 +57,12 @@ def send_buttons(sock: socket.socket, buttons: int) -> None:
     '''
     Sends a byte of button input data to the socket, which will be read by the
     Lua script controlling the DeSmuME emulator. The byte is formatted as follows:
-
+    - (MSB)
     - Bit 0: 'A' button
     - Bit 1: Left button
     - Bit 2: Right button
     - Bits 3-7: Unused
+    - (LSB)
 
     ### Arguments
     #### Required
